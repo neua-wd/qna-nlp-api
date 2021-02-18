@@ -1,7 +1,5 @@
 from flask import Flask
 from flask_restful import Api, Resource
-import pandas as pd
-import re
 
 from resources.overview import Overview
 from resources.details import Details
