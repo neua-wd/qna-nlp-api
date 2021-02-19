@@ -8,7 +8,7 @@ app = Flask(__name__)
 api = Api(app)
 
 
-api.add_resource(Overview, "/overview/<string:id>")
+api.add_resource(Overview, "/overview")
 api.add_resource(Details, "/details")
 
 
