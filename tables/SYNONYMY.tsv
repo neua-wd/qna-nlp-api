@@ -1,4 +1,4 @@
-X	ACTION	Y	[FILL] is synonymous with/means	X	ACTION	Y	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+X	ACTION	Y	[FILL] is synonymous with/means	X.1	ACTION.1	Y.1	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 a boat			is similar to	a ship					2e50-5461-745a-36ee
 a cable			is similar to	a wire					e77b-df5f-c14c-c531
 a climate			is synonymous with	an environment 					0696-4d28-5530-2f95

@@ -1,4 +1,4 @@
-VERB	THING/PROPERTY	[FILL] is the opposite of	VERB	THING/PROPERTY	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+VERB	THING/PROPERTY	[FILL] is the opposite of	VERB.1	THING/PROPERTY.1	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 	an increase	is the opposite of		a decrease			bfdf-b468-ee22-1b60
 	an insulator	is the opposite of		a conductor			9493-f99f-c366-f5bc
 	below	is the opposite of		above			cabb-556b-730d-bbc7

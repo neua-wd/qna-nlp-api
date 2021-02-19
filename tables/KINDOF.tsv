@@ -1,4 +1,4 @@
-[FILL] a/the	HYPONYM	[FILL] is a kind of	SCOPE	HYPERNYM	[FILL] for	FOR/PURPOSE	BY/THROUGH/HOW	SCOPE	QUANTITY/RANGE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+[FILL] a/the	HYPONYM	[FILL] is a kind of	SCOPE	HYPERNYM	[FILL] for	FOR/PURPOSE	BY/THROUGH/HOW	SCOPE.1	QUANTITY/RANGE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 the	ability to grow	is a kind of		trait								0d2a-34ad-e231-a167
 the	ability to reflect off of a surface	is a kind of		characteristic							Move to PropertiesGeneric?	cc0c-1716-b089-2d07
 	absorbing	is a kind of		function								8a87-904f-85e9-deb5

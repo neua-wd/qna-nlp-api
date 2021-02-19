@@ -1,4 +1,4 @@
-[FILL] to a/ to the	THING	[FILL] a	SCOPE	X	[FILL] of	LOWER	UNITS	[FILL] to	UPPER	UNITS	[FILL] is considered	MAGNITUDE	VALUE	ATTRIBUTE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+[FILL] to a/ to the	THING	[FILL] a	SCOPE	X	[FILL] of	LOWER	UNITS	[FILL] to	UPPER	UNITS.1	[FILL] is considered	MAGNITUDE	VALUE	ATTRIBUTE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 to a 	human	a	air; environment	temperature	of	-450	F	to	32	F	is considered	very	cold				1cda-9709-e82c-ee90
 to a 	human	a	air; environment	temperature	of	32	F	to	50	F	is considered		cold				6532-8ea6-ce14-1b62
 to a 	human	a	air; environment	temperature	of	50	F	to	70	F	is considered		cool				c9fe-e5b5-e32d-cebc

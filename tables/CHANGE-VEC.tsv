@@ -1,4 +1,4 @@
-PROCESS_NAME/ ACTION	[FILL] means	ADJ	AGENT/OBJECT	SCOPE	[FILL] are	ACTION	DIRECTION	[FILL] a/the	QUANTITY	PATIENT	[FILL] for	FOR/PURPOSE	[FILL] through	BY/THROUGH/HOW	SCOPE	QUANTITY/RANGE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+PROCESS_NAME/ ACTION	[FILL] means	ADJ	AGENT/OBJECT	SCOPE	[FILL] are	ACTION	DIRECTION	[FILL] a/the	QUANTITY	PATIENT	[FILL] for	FOR/PURPOSE	[FILL] through	BY/THROUGH/HOW	SCOPE.1	QUANTITY/RANGE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 heating	means						adding			heat									9469-8559-7f35-1bbd
 melting	is when		solids		are		heated									above their melting point			8cbb-8bf8-bfbd-681e
 cooling;colder	means						removing;reducing;decreasing			heat;temperature									3a9b-81b5-1a3a-40a0

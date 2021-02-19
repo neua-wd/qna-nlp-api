@@ -1,4 +1,4 @@
-[FILL] as a/the	QUANTITY/MEASURE	AGENT/ATTRIBUTE	SCOPE	ACTION	PATIENT	CHANGE1	SCOPE	[FILL] ,	[FILL] a/the	QUANTITY/MEASURE	AGENT/ATTRIBUTE	SCOPE	[FILL] will	ACTION	PATIENT	[FILL] will	QUALIFIER	CHANGE2	SCOPE	CONTEXT	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+[FILL] as a/the	QUANTITY/MEASURE	AGENT/ATTRIBUTE	SCOPE	ACTION	PATIENT	CHANGE1	SCOPE.1	[FILL] ,	[FILL] a/the	QUANTITY/MEASURE.1	AGENT/ATTRIBUTE.1	SCOPE.2	[FILL] will	ACTION.1	PATIENT.1	[FILL] will.1	QUALIFIER	CHANGE2	SCOPE.3	CONTEXT	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 as	something	that emits light				becomes closer		,			that something		will	appear				brighter				Refactored in table.	8ccc-1b06-5b19-c569
 as	roughness	of a surface				increases		,		friction			will					increase					f5db-3d81-10c5-e292
 as the	temperature	of a liquid				increases		,			that liquid		will	evaporate				quicker					1a64-71d5-62de-afa4

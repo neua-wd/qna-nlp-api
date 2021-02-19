@@ -1,4 +1,4 @@
-[FILL] a/the	ADJ	THING	QUALIFIER	[FILL] is/has	QUALIFIER	MAGNITUDE	VALUE	ATTRIBUTE	SCOPE/RELATIVETO	[FILL] with values between	LOWERBOUND	[FILL] and	UPPERBOUND	UNITS	[FILL] for/to	PURPOSE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+[FILL] a/the	ADJ	THING	QUALIFIER	[FILL] is/has	QUALIFIER.1	MAGNITUDE	VALUE	ATTRIBUTE	SCOPE/RELATIVETO	[FILL] with values between	LOWERBOUND	[FILL] and	UPPERBOUND	UNITS	[FILL] for/to	PURPOSE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 		a part of a living thing		is			a natural	structure											0b7b-e025-3fb7-01dd
 an		acid		is			acidic												a83c-9d85-5625-d525
 an		airplane		is			fast	in speed											f39e-99d0-faec-c532
@@ -32,7 +32,7 @@ a		desert		has			low	rainfall										Moved to PROP-ENVIRONMENTATTRIB	4970-bab6
 an		desert	usually	has			a lot	of sunlight										Moved to PROP-ENVIRONMENTATTRIB	7c2b-18d1-829c-048c
 a		desert	usually	is			hot	in temperature										Moved to PROP-ENVIRONMENTATTRIB	2ce9-8375-8a58-750f
 a		desk		is	usually		short	in height; in width											0100-2f53-c324-81e2
-a		desk	usually	has a				length		with values between	50	and	250	cm					389e-42be-0a2b-0683
+a		desk	usually	has a				length		with values between	50.0	and	250	cm					389e-42be-0a2b-0683
 		desserts	usually	have			less 	nutrients	than other foods										d716-961b-dfd9-e792
 a	face	dimple		is			depressed; indented	in shape											87a1-9fd1-636a-072d
 a		drop		is			a small	amount of liquid											1383-98fd-54fa-3ce4
@@ -138,7 +138,7 @@ a		star		is		very	hot	in temperature											0ef0-7edc-e18e-a2fa
 		stars		are	some of the		hottest	objects											9ec4-cf33-e33d-d108
 		steam		is			hot	in temperature											329c-e273-405b-8f40
 a		string		is	usually		small	in diameter											509c-64c9-84f2-42ff
-a		string		is	usually		short	in length		with values between	2	and	1000	cm					0d5d-fcee-547a-e20c
+a		string		is	usually		short	in length		with values between	2.0	and	1000	cm					0d5d-fcee-547a-e20c
 		sulfur		is			yellow	in color											2db1-ab10-ff6c-cc17
 		summer		has			hot	temperatures; weather											a6b9-8323-ab01-cfe7
 		summer		has			the most	sunlight											a0de-6074-3154-0632

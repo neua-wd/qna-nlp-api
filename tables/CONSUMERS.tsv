@@ -1,4 +1,4 @@
-ORGANISM	QUANTIFIER	eats/consumes	ORGANISM	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+ORGANISM	QUANTIFIER	eats/consumes	ORGANISM.1	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 hawks;eagles		eat	snakes;lizards			d28f-0727-460f-5ab6
 birds	sometimes	eat	berries;seeds			a6aa-97ee-2e4a-a9ad
 humans		eat	crops			76c8-6933-622a-64f6

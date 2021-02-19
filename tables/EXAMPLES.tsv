@@ -1,4 +1,4 @@
-[FILL] An example of	VERB	AGENT/OBJECT	SCOPE	[FILL] is	AGENT/OBJECT	VERB	AGENT/OBJECT	[FILL] for	FOR/PURPOSE	[FILL] by/through	BY/THROUGH/HOW	SCOPE	QUANTITY/RANGE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+[FILL] An example of	VERB	AGENT/OBJECT	SCOPE	[FILL] is	AGENT/OBJECT.1	VERB.1	AGENT/OBJECT.2	[FILL] for	FOR/PURPOSE	[FILL] by/through	BY/THROUGH/HOW	SCOPE.1	QUANTITY/RANGE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 An example of a		change	in the Earth	is	an ocean	becoming	a wooded area									3135-2d8c-c018-d7a3
 An example of a		chemical change		is	acid	breaking down	substances									9213-5a66-7733-0fc8
 An example of a		fossil		is	a paw print							in rock				8867-690e-1dfa-c7b4

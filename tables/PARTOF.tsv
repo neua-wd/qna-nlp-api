@@ -1,4 +1,4 @@
-[FILL] a/the	PART	QUANTIFIER	[FILL] is a part of	QUANTIFIER	WHOLE	[FILL] for	FOR/PURPOSE	[FILL] by	BY/THROUGH/HOW	SCOPE	QUANTITY/RANGE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+[FILL] a/the	PART	QUANTIFIER	[FILL] is a part of	QUANTIFIER.1	WHOLE	[FILL] for	FOR/PURPOSE	[FILL] by	BY/THROUGH/HOW	SCOPE	QUANTITY/RANGE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 	adulthood	is	a part of		the life cycle								Moved to STAGE-IN-PROCESS	e222-9ed6-45d6-12f7
 the	afternoon	is 	a part of the		day									6349-70d1-a00d-308e
 	arms	are	a part of a		person's body	for	manipulating objects							31c9-367f-4e89-4086

@@ -1,4 +1,4 @@
-DEFINITION_NAME	[FILL] is when	ACTION	[FILL] the/a	QUANTIFIER	ADJ	AGENT/OBJECT	SCOPE	QUANITIFIER	ACTION	OBJECT/PROPERTY	WHEN/WHERE	[FILL] by (mechanism)	HOW	[FILL] for/to	FOR/PURPOSE	[FILL] by/through	BY/THROUGH/HOW	SCOPE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+DEFINITION_NAME	[FILL] is when	ACTION	[FILL] the/a	QUANTIFIER	ADJ	AGENT/OBJECT	SCOPE	QUANITIFIER	ACTION.1	OBJECT/PROPERTY	WHEN/WHERE	[FILL] by (mechanism)	HOW	[FILL] for/to	FOR/PURPOSE	[FILL] by/through	BY/THROUGH/HOW	SCOPE.1	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 			a			vehicle	for something		allows; enables	that something to occur											bb32-0bc0-3629-6bca
 		adding				heat	to something		kills	viruses; bacteria	in that something										1966-99de-7765-39de
 				some	adult	animals			lay	eggs											73df-7e6e-db00-ae55

@@ -1,4 +1,4 @@
-[FILL] a	ACTION	AGENT/OBJECT	SCOPE	QUALIFIER	[FILL] is used for	FOR/PURPOSE	PATIENT	[FILL] by	AGENT/THING WHO USES	[FILL] by/through	BY/THROUGH/HOW	SCOPE	QUANTITY/RANGE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
+[FILL] a	ACTION	AGENT/OBJECT	SCOPE	QUALIFIER	[FILL] is used for	FOR/PURPOSE	PATIENT	[FILL] by	AGENT/THING WHO USES	[FILL] by/through	BY/THROUGH/HOW	SCOPE.1	QUANTITY/RANGE	[SKIP] COMMENTS	[SKIP] DEP	[SKIP] UID
 	heating	a liquid		can be	used to	identify	that liquid's boiling point									f685-05f4-46b2-1a83
 a		source of heat		can be	used to	heat	something									b62f-8dfd-e486-3a96
 a		switch			is used to	start; stop	the flow of current					in an electrical circuit				9580-9f11-5f23-3df4
