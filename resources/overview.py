@@ -57,12 +57,8 @@ class Overview(Resource):
             explanation_dict = {}
             for column in row.columns:
                 value = row[column].values[0]
-                if (type(value) == str):
-                    if ('[SKIP]' not in column):
-                        # if ('[FILL]' in column):
-                        #     explanation_dict[column] = column
-                        # else:
-                        explanation_dict[column] = value
+                if ('[SKIP]' not in column):
+                    explanation_dict[column] = value if type(value) == str else ''
             explanations.append(explanation_dict)
 
 
