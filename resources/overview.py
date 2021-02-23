@@ -57,7 +57,7 @@ class Overview(Resource):
             explanation_dict = {}
             for column in row.columns:
                 value = row[column].values[0]
-                if ('[SKIP]' not in column):
+                if ((column == '[SKIP] UID') | ('[SKIP]' not in column)):
                     explanation_dict[column] = value if type(value) == str else ''
             explanations.append(explanation_dict)
 
