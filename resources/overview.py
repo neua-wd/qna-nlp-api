@@ -12,7 +12,7 @@ class Overview(Resource):
     def get(self):
         row = self.__getRow(Overview.parser.parse_args()['question'])
 
-        question_elements = re.split('\(', row['question'].values[0])
+        question_elements = re.split(' \(', row['question'].values[0])
         choices = self.__getChoices(question_elements)
         explanation = self.__getExplanation(row['explanation'].values[0])
         
