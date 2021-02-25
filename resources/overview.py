@@ -13,15 +13,14 @@ class Overview(Resource):
         row = self.__getRow(Overview.parser.parse_args()['question'])
 
         question_elements = re.split(' \(', row['question'].values[0])
-        choices = self.__getChoices(question_elements)
-        explanation = self.__getExplanation(row['explanation'].values[0])
-        
-        overview = {"question": question_elements[0]}
-        overview['answer'] = row['AnswerKey'].values[0]
-        overview['choices'] = choices
-        overview['explanation'] = explanation
 
-        return overview
+        return {
+            'question_id': row['QuestionID'].values[0],
+            'question': question_elements[0],
+            'choices': self.__getChoices(question_elements),
+            'answer': row['AnswerKey'].values[0],
+            'explanation': self.__getExplanation(row['explanation'].values[0])
+        }
 
 
     def __getRow(self, question):
