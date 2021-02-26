@@ -1,16 +1,24 @@
-from flask_restful import Resource, reqparse
 import pandas as pd
 import re
 import glob
-import numpy as np
+
 from constants import QUESTION_FILE_PATH, TABLES_DIRECTORY
 
-class Overview(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument('question', type=str, required=True, help='Please provide the question')
 
-    def get(self):
-        row = self.__getRow(Overview.parser.parse_args()['question'])
+class Overview:
+    def find(self, question):
+        return self.__get_overview_from_row(
+            self.__get_row_by_question(question))
+
+
+    def find_by_id(self, question_id):
+        return self.__get_overview_from_row(
+            self.__get_row_by_id(question_id))
+
+
+    def __get_overview_from_row(self, row):
+        if (len(row['question'].values) == 0): raise Exception(
+            'Question does not exist')
 
         question_elements = re.split(' \(', row['question'].values[0])
 
@@ -23,11 +31,16 @@ class Overview(Resource):
         }
 
 
-    def __getRow(self, question):
+    def __get_row_by_question(self, question):
         table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
 
         return table[table['question'].str.contains(question)]
 
+
+    def __get_row_by_id(self, question_id):
+        table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
+
+        return table[table['QuestionID'] == question_id]
 
     def __getChoices(self, question_elements):
         choices = {}
@@ -37,7 +50,7 @@ class Overview(Resource):
 
         return choices
 
-    
+
     def __getExplanation(self, ids_with_tags):
         explanation_ids = []
         explanation_rows = []
@@ -53,12 +66,12 @@ class Overview(Resource):
                 explanation_rows.append(row)
 
         for row in explanation_rows:
-            explanation_dict = {}
+            explanation = {}
             for column in row.columns:
                 value = row[column].values[0]
                 if ((column == '[SKIP] UID') | ('[SKIP]' not in column)):
-                    explanation_dict[column] = value if type(value) == str else ''
-            explanations.append(explanation_dict)
+                    explanation[column] = value if type(value) == str else ''
+            explanations.append(explanation)
 
 
         return explanations

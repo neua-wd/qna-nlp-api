@@ -1,11 +1,12 @@
-from flask_restful import Resource, reqparse
 import glob
 import pandas as pd
 import os
+
 from constants import TABLES_DIRECTORY
 
-class ColumnNames(Resource):
-  def get(self):
+
+class Template:
+  def find_all(self):
     column_names = {}
 
     for path in glob.glob(TABLES_DIRECTORY + '/*.tsv'):

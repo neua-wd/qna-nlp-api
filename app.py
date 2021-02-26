@@ -1,19 +1,19 @@
 from flask import Flask
-from flask_restful import Api, Resource
+from flask_restful import Api
 
-from resources.overview import Overview
-from resources.details import Details
-from resources.fact import Fact
-from resources.column_names import ColumnNames
+
+from controllers.OverviewController import OverviewController
+from controllers.FactController import FactController
+from controllers.TemplateController import TemplateController
+
 
 app = Flask(__name__)
 api = Api(app)
 
 
-api.add_resource(Overview, "/overview")
-api.add_resource(Details, "/details")
-api.add_resource(Fact, "/fact")
-api.add_resource(ColumnNames, "/column_names")
+api.add_resource(OverviewController, "/overview")
+api.add_resource(FactController, "/fact")
+api.add_resource(TemplateController, "/templates")
 
 
 if __name__ == '__main__':
