@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Api
+import os
 
 
 from controllers.OverviewController import OverviewController
@@ -16,5 +17,6 @@ api.add_resource(FactController, "/fact")
 api.add_resource(TemplateController, "/templates")
 
 
+port = int(os.environ.get("PORT", 80))
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=port, debug=True)
