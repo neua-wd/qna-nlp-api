@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 import os
 
 
@@ -10,6 +11,11 @@ from controllers.TemplateController import TemplateController
 
 app = Flask(__name__)
 api = Api(app)
+
+
+cors = CORS(app, resources={
+            r"*": {"origins":
+                   "http://localhost:3000, https://qna-nlp.herokuapp.com"}})
 
 
 api.add_resource(OverviewController, "/overview")
