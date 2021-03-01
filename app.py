@@ -15,7 +15,7 @@ api = Api(app)
 
 cors = CORS(app, resources={
             r"*": {"origins":
-                   "http://localhost:3000, https://qna-nlp.herokuapp.com"}})
+                   ["http://localhost:3000", "https://qna-nlp.herokuapp.com"]}})
 
 
 api.add_resource(OverviewController, "/overview")
