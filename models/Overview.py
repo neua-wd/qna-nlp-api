@@ -10,15 +10,13 @@ class Overview:
         return self.__get_overview_from_row(
             self.__get_row_by_question(question))
 
-
     def find_by_id(self, question_id):
         return self.__get_overview_from_row(
             self.__get_row_by_id(question_id))
 
-
     def __get_overview_from_row(self, row):
-        if (len(row['question'].values) == 0): raise Exception(
-            'Question does not exist')
+        if (len(row['question'].values) == 0):
+            raise Exception('Question does not exist')
 
         question_elements = re.split(' \(', row['question'].values[0])
 
@@ -30,12 +28,10 @@ class Overview:
             'explanation': self.__getExplanation(row['explanation'].values[0])
         }
 
-
     def __get_row_by_question(self, question):
         table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
 
         return table[table['question'].str.contains(question)]
-
 
     def __get_row_by_id(self, question_id):
         table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
@@ -50,7 +46,6 @@ class Overview:
 
         return choices
 
-
     def __getExplanation(self, ids_with_tags):
         explanation_ids = []
         explanation_rows = []
@@ -58,20 +53,22 @@ class Overview:
 
         for id in ids_with_tags.split():
             explanation_ids.append(id.split('|')[0])
-        
+
         for path in glob.glob(TABLES_DIRECTORY + '/*.tsv'):
             table = pd.read_csv(path, sep='\t')
-            row = table.loc[table['[SKIP] UID'].isin(explanation_ids)]
-            if (row.size > 0):
-                explanation_rows.append(row)
+            for explanation_id in explanation_ids:
+                row = table.loc[table['[SKIP] UID'] == explanation_id]
+                if (row.size > 0):
+                    explanation_rows.append(row)
 
         for row in explanation_rows:
             explanation = {}
             for column in row.columns:
-                value = row[column].values[0]
-                if ((column == '[SKIP] UID') | ('[SKIP]' not in column)):
-                    explanation[column] = value if type(value) == str else ''
+                for i in range(row[column].size):
+                    value = row[column].values[i]
+                    if ((column == '[SKIP] UID') | ('[SKIP]' not in column)):
+                        explanation[column] = value if type(
+                            value) == str else ''
             explanations.append(explanation)
-
 
         return explanations
