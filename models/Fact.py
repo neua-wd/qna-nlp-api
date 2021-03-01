@@ -15,7 +15,6 @@ class Fact:
         self.__addNewFact(fact_table_path, new_fact, new_fact_id)
         self.__addFactToExplanation(question_id, new_fact_id)
 
-
     def update(self, edited_fact):
         fact_id = edited_fact['[SKIP] UID']
 
@@ -29,8 +28,8 @@ class Fact:
 
                 table.to_csv(path, sep='\t', index=False)
 
-
     # Add the new fact to the corresponding fact table
+
     def __addNewFact(self, fact_table_path, new_fact, new_fact_id):
         try:
             fact_table = pd.read_csv(fact_table_path, sep='\t')
@@ -45,8 +44,8 @@ class Fact:
 
         updated_fact_table.to_csv(fact_table_path, sep='\t', index=False)
 
-
     # Add the id of the new fact to question's explanation list
+
     def __addFactToExplanation(self, question_id, new_fact_id):
         questions = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
 
@@ -58,6 +57,6 @@ class Fact:
             raise Exception('Question with given ID does not exist')
 
         questions.loc[questions['QuestionID'] == question_id, 'explanation'] = (
-            question_row['explanation'].values[0] + ' ' + new_fact_id)
+            question_row['explanation'].values[0] + ' ' + new_fact_id + '|ADDED')
 
         questions.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)

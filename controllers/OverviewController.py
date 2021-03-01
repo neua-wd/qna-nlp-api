@@ -8,8 +8,9 @@ class OverviewController(Resource):
         try:
             parser = reqparse.RequestParser()
             parser.add_argument('question', type=str, required=True,
-                help='Please provide the question')
+                                help='Please provide the question')
 
             return Overview().find(parser.parse_args()['question'])
         except Exception as e:
-            return { 'error': e.args }
+            print(e)
+            return {'error': e.args}
