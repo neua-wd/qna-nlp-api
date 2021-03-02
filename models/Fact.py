@@ -8,12 +8,12 @@ from constants import TABLES_DIRECTORY, QUESTION_FILE_PATH
 class Fact:
     # Add new fact to the corresponsing fact table
     # and add the id to the question's explanation list
-    def add(self, fact_table_name, question_id, new_fact):
+    def add(self, fact_table_name, question_id, explanation, new_fact):
         fact_table_path = TABLES_DIRECTORY + "/" + fact_table_name + '.tsv'
         new_fact_id = str(uuid.uuid4())
 
-        self.__addNewFact(fact_table_path, new_fact, new_fact_id)
-        self.__addFactToExplanation(question_id, new_fact_id)
+        self.__add_new_fact(fact_table_path, new_fact, new_fact_id)
+        self.__add_fact_to_explanation(question_id, new_fact_id, explanation)
 
     def update(self, edited_fact):
         fact_id = edited_fact['[SKIP] UID']
@@ -29,8 +29,7 @@ class Fact:
                 table.to_csv(path, sep='\t', index=False)
 
     # Add the new fact to the corresponding fact table
-
-    def __addNewFact(self, fact_table_path, new_fact, new_fact_id):
+    def __add_new_fact(self, fact_table_path, new_fact, new_fact_id):
         try:
             fact_table = pd.read_csv(fact_table_path, sep='\t')
         except FileNotFoundError:
@@ -45,18 +44,19 @@ class Fact:
         updated_fact_table.to_csv(fact_table_path, sep='\t', index=False)
 
     # Add the id of the new fact to question's explanation list
-
-    def __addFactToExplanation(self, question_id, new_fact_id):
+    def __add_fact_to_explanation(self, question_id, new_fact_id, explanation):
         questions = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
 
-        # Append the new fact id to the list of explanations
-        question_row = (
-            questions[questions['QuestionID'] == question_id])
+        question_row = (questions[questions['QuestionID'] == question_id])
+        if type(question_row[explanation].values[0]) == str:
+            existing_explanation = question_row[explanation].values[0]
+        else:
+            existing_explanation = ''
 
         if (len(question_row.values) == 0):
             raise Exception('Question with given ID does not exist')
 
-        questions.loc[questions['QuestionID'] == question_id, 'explanation'] = (
-            question_row['explanation'].values[0] + ' ' + new_fact_id + '|ADDED')
+        questions.loc[questions['QuestionID'] == question_id, explanation] = (
+            existing_explanation + ' ' + new_fact_id + '|ADDED')
 
         questions.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
