@@ -23,9 +23,14 @@ class Overview:
         return {
             'question_id': row['QuestionID'].values[0],
             'question': question_elements[0],
-            'choices': self.__getChoices(question_elements),
+            'choices': self.__get_choices(question_elements),
             'answer': row['AnswerKey'].values[0],
-            'explanation': self.__getExplanation(row['explanation'].values[0])
+            'explanation': self.__get_explanation(row['explanation'].values[0]),
+            'explanationA': self.__get_explanation(row['explanationA'].values[0]),
+            'explanationB': self.__get_explanation(row['explanationB'].values[0]),
+            'explanationC': self.__get_explanation(row['explanationC'].values[0]),
+            'explanationD': self.__get_explanation(row['explanationD'].values[0]),
+            'explanationE': self.__get_explanation(row['explanationE'].values[0]),
         }
 
     def __get_row_by_question(self, question):
@@ -38,7 +43,7 @@ class Overview:
 
         return table[table['QuestionID'] == question_id]
 
-    def __getChoices(self, question_elements):
+    def __get_choices(self, question_elements):
         choices = {}
         for i in range(1, len(question_elements)):
             choice = question_elements[i]
@@ -46,7 +51,10 @@ class Overview:
 
         return choices
 
-    def __getExplanation(self, ids_with_tags):
+    def __get_explanation(self, ids_with_tags):
+        if type(ids_with_tags) != str:
+            return []
+
         explanation_ids = []
         explanation_rows = []
         explanations = []
