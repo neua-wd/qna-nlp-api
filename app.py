@@ -7,6 +7,7 @@ import os
 from controllers.OverviewController import OverviewController
 from controllers.FactController import FactController
 from controllers.TemplateController import TemplateController
+from controllers.SuggestionController import SuggestionController
 
 
 app = Flask(__name__)
@@ -21,6 +22,7 @@ cors = CORS(app, resources={
 api.add_resource(OverviewController, "/overview")
 api.add_resource(FactController, "/fact")
 api.add_resource(TemplateController, "/templates")
+api.add_resource(SuggestionController, '/suggestions')
 
 
 port = int(os.environ.get("PORT", 80))

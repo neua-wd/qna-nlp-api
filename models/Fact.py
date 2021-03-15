@@ -28,6 +28,22 @@ class Fact:
 
                 table.to_csv(path, sep='\t', index=False)
 
+    # return some random facts (mock data) for now
+    def get_similar(self):
+        table_name = 'ACTION'
+        fact_table_path = TABLES_DIRECTORY + "/" + table_name + '.tsv'
+        fact_table = pd.read_csv(fact_table_path, sep='\t')
+
+        similar = []
+        for row in fact_table.head(10).to_dict(orient='rows'):
+            fact = {}
+            for (key, value) in row.items():
+                if type(value) == str:
+                    fact[key] = value
+            similar.append({table_name: fact})
+
+        return similar
+
     # Add the new fact to the corresponding fact table
     def __add_new_fact(self, fact_table_path, new_fact, new_fact_id):
         try:
