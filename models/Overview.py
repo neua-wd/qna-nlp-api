@@ -14,6 +14,11 @@ class Overview:
         return self.__get_overview_from_row(
             self.__get_row_by_id(question_id))
 
+    def sample(self):
+        return self.__get_overview_from_row(
+            self.__get_random_row()
+        )
+
     def __get_overview_from_row(self, row):
         if (len(row['question'].values) == 0):
             raise Exception('Question does not exist')
@@ -37,6 +42,11 @@ class Overview:
         table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
 
         return table[table['question'].str.contains(question)]
+
+    def __get_random_row(self):
+        table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
+
+        return table.sample()
 
     def __get_row_by_id(self, question_id):
         table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
