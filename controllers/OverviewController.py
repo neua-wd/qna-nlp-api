@@ -7,10 +7,15 @@ class OverviewController(Resource):
     def get(self):
         try:
             parser = reqparse.RequestParser()
-            parser.add_argument('question', type=str, required=True,
+            parser.add_argument('question', type=str,
                                 help='Please provide the question')
 
-            return Overview().find(parser.parse_args()['question'])
+            question = parser.parse_args()['question']
+            if (question):
+                return Overview().find(question)
+            else:
+                return Overview().sample()
+
         except Exception as e:
             print(e)
             return {'error': e.args}
