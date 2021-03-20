@@ -9,8 +9,7 @@ class OverviewController(Resource):
     def get(self):
         try:
             parser = reqparse.RequestParser()
-            parser.add_argument('question', type=str,
-                                help='Please provide the question')
+            parser.add_argument('question', type=str)
 
             question = parser.parse_args()['question']
             if (question):
@@ -26,17 +25,29 @@ class OverviewController(Resource):
     def patch(self):
         try:
             parser = reqparse.RequestParser()
-            parser.add_argument('question_id', type=str,
-                                help='Please provide the question ID')
-            parser.add_argument('fact_id', type=str,
-                                help='Please provide the fact ID')
-            parser.add_argument('explanation', type=str,
-                                help='Please specify the choice (eg. explanationA)')
+            parser.add_argument('question_id', type=str)
+            parser.add_argument('explanation_column', type=str)
+            parser.add_argument('fact_id', type=str)
+            # Passing a list of strings with flask_restful is a known bug
+            # The issue is still open
+            # A workaround is to set parameters like below
+            parser.add_argument('new_order', required=False,
+                                type=str, action='append', default=[])
 
             question_id = parser.parse_args()['question_id']
+            explanation_column = parser.parse_args()['explanation_column']
             fact_id = parser.parse_args()['fact_id']
-            explanation = parser.parse_args()['explanation']
+            new_oder = parser.parse_args()['new_order']
 
-            return Overview().remove_fact(question_id, fact_id, explanation)
+            if (not (fact_id or new_oder)):
+                return {'error': 'Please provide either the new order or the fact_id'}
+
+            if (fact_id):
+                return Overview().remove_fact(question_id, explanation_column,
+                                              fact_id)
+            else:
+                return Overview().update_explanation_order(question_id,
+                                                           explanation_column,
+                                                           new_oder)
         except Exception as e:
             return {'error': e.args}

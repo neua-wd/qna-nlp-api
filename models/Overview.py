@@ -6,30 +6,63 @@ from constants import QUESTION_FILE_PATH, TABLES_DIRECTORY
 
 
 class Overview:
+    def __init__(self):
+        self.question_table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
+
     def find(self, question):
-        return self.__get_overview_from_row(
-            self.__get_row_by_question(question))
+        row = self.question_table[self.question_table['question'].str.contains(
+            question)]
+
+        return self.__get_overview_from_row(row)
 
     def find_by_id(self, question_id):
-        return self.__get_overview_from_row(
-            self.__get_row_by_id(question_id))
+        row = self.question_table[self.question_table['QuestionID']
+                                  == question_id]
+
+        return self.__get_overview_from_row(row)
 
     def sample(self):
+        return self.__get_overview_from_row(self.question_table.sample())
+
+    def remove_fact(self, question_id, explanation_column, fact_id):
+        question_row = self.question_table[self.question_table['QuestionID']
+                                           == question_id]
+        explanation_ids = question_row[explanation_column].values[0].split()
+
+        self.question_table.loc[self.question_table['QuestionID']
+                                == question_id, explanation_column] = ' '.join(
+                                    [fact for fact in explanation_ids if (
+                                     fact_id not in fact)])
+
+        self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
+
         return self.__get_overview_from_row(
-            self.__get_random_row()
-        )
+            self.question_table[self.question_table['QuestionID']
+                                == question_id])
 
-    def remove_fact(self, question_id, fact_id, explanation):
-        table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
-        question_row = table[table['QuestionID'] == question_id]
-        explanation_ids = question_row['explanation'].values[0].split()
+    def update_explanation_order(self,
+                                 question_id,
+                                 explanation_column,
+                                 new_order):
+        print(new_order)
+        question_row = self.question_table[self.question_table['QuestionID']
+                                           == question_id]
+        old_explanation = question_row[explanation_column].values[0].split()
 
-        table.loc[table['QuestionID'] == question_id, explanation] = ' '.join([
-            fact for fact in explanation_ids if fact_id not in fact])
+        new_explanation = []
+        for fact_id in new_order:
+            new_explanation.append(
+                ''.join(
+                    [id_with_tag for id_with_tag in old_explanation if fact_id in id_with_tag]))
 
-        table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
+        self.question_table.loc[self.question_table['QuestionID']
+                                == question_id, explanation_column] = ' '.join(new_explanation)
 
-        return self.__get_overview_from_row(question_row)
+        self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
+
+        return self.__get_overview_from_row(
+            self.question_table[self.question_table['QuestionID']
+                                == question_id])
 
     def __get_overview_from_row(self, row):
         if (len(row['question'].values) == 0):
@@ -49,21 +82,6 @@ class Overview:
             'explanationD': self.__get_explanation(row['explanationD'].values[0]),
             'explanationE': self.__get_explanation(row['explanationE'].values[0]),
         }
-
-    def __get_row_by_question(self, question):
-        table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
-
-        return table[table['question'].str.contains(question)]
-
-    def __get_row_by_id(self, question_id):
-        table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
-
-        return table[table['QuestionID'] == question_id]
-
-    def __get_random_row(self):
-        table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
-
-        return table.sample()
 
     def __get_choices(self, question_elements):
         choices = {}
