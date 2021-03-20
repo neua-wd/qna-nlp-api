@@ -40,7 +40,7 @@ class OverviewController(Resource):
             new_oder = parser.parse_args()['new_order']
 
             if (not (fact_id or new_oder)):
-                return {'error': 'Please provide either the new order or the fact_id'}
+                return {'error': 'Please provide either the new_order or the fact_id'}
 
             if (fact_id):
                 return Overview().remove_fact(question_id, explanation_column,
