@@ -12,7 +12,7 @@ class FactController(Resource):
                                 help='Please provide the table name')
             parser.add_argument('to_question', type=str, required=True,
                                 help='Please provide the question ID')
-            parser.add_argument('explanation', type=str, required=True,
+            parser.add_argument('explanation_column', type=str, required=True,
                                 help='Please provide the explanation column')
             parser.add_argument('new_fact', type=dict, required=True,
                                 help='Please provide the new fact')
@@ -20,7 +20,7 @@ class FactController(Resource):
             args = parser.parse_args()
 
             Fact().add(args['table_name'], args['to_question'],
-                       args['explanation'], args['new_fact'])
+                       args['explanation_column'], args['new_fact'])
 
             return Overview().find_by_id(args['to_question'])
         except Exception as e:
