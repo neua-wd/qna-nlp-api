@@ -6,18 +6,47 @@ from constants import QUESTION_FILE_PATH, TABLES_DIRECTORY
 
 
 class Overview:
+    def __init__(self):
+        self.question_table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
+
     def find(self, question):
-        return self.__get_overview_from_row(
-            self.__get_row_by_question(question))
+        row = self.question_table[self.question_table['question'].str.contains(
+            question)]
+
+        return self.__get_overview_from_row(row)
 
     def find_by_id(self, question_id):
-        return self.__get_overview_from_row(
-            self.__get_row_by_id(question_id))
+        row = self.question_table[self.question_table['QuestionID']
+                                  == question_id]
+
+        return self.__get_overview_from_row(row)
 
     def sample(self):
+        sample = self.question_table.sample()
+        return self.__get_overview_from_row(sample)
+
+    def update_explanation(self,
+                           question_id,
+                           explanation_column,
+                           new_facts):
+        question_row = self.question_table[self.question_table['QuestionID']
+                                           == question_id]
+        old_explanation = question_row[explanation_column].values[0].split()
+
+        new_facts_with_tags = []
+        for fact_id in new_facts:
+            new_facts_with_tags.append(
+                ''.join(
+                    [id_with_tag for id_with_tag in old_explanation if fact_id in id_with_tag]))
+
+        self.question_table.loc[self.question_table['QuestionID']
+                                == question_id, explanation_column] = ' '.join(new_facts_with_tags)
+
+        self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
+
         return self.__get_overview_from_row(
-            self.__get_random_row()
-        )
+            self.question_table[self.question_table['QuestionID']
+                                == question_id])
 
     def __get_overview_from_row(self, row):
         if (len(row['question'].values) == 0):
@@ -38,21 +67,6 @@ class Overview:
             'explanationE': self.__get_explanation(row['explanationE'].values[0]),
         }
 
-    def __get_row_by_question(self, question):
-        table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
-
-        return table[table['question'].str.contains(question)]
-
-    def __get_random_row(self):
-        table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
-
-        return table.sample()
-
-    def __get_row_by_id(self, question_id):
-        table = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
-
-        return table[table['QuestionID'] == question_id]
-
     def __get_choices(self, question_elements):
         choices = {}
         for i in range(1, len(question_elements)):
@@ -67,10 +81,10 @@ class Overview:
 
         explanation_ids = []
         explanation_rows = []
-        explanations = []
+        explanations = {}
 
-        for id in ids_with_tags.split():
-            explanation_ids.append(id.split('|')[0])
+        for fact_id in ids_with_tags.split():
+            explanation_ids.append(fact_id.split('|')[0])
 
         for path in glob.glob(TABLES_DIRECTORY + '/*.tsv'):
             table = pd.read_csv(path, sep='\t')
@@ -87,6 +101,15 @@ class Overview:
                     if ((column == '[SKIP] UID') | ('[SKIP]' not in column)):
                         explanation[column] = value if type(
                             value) == str else ''
-            explanations.append(explanation)
 
-        return explanations
+            explanations[row['[SKIP] UID'].values[0]] = explanation
+
+        return self.__get_correct_order(explanation_ids, explanations)
+
+    def __get_correct_order(self, explanation_ids, explanations):
+        ordered = []
+        for explanation_id in explanation_ids:
+            if (explanation_id in explanations):
+                ordered.append(explanations[explanation_id])
+
+        return ordered

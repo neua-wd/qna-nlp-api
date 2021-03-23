@@ -8,12 +8,13 @@ from constants import TABLES_DIRECTORY, QUESTION_FILE_PATH
 class Fact:
     # Add new fact to the corresponsing fact table
     # and add the id to the question's explanation list
-    def add(self, fact_table_name, question_id, explanation, new_fact):
+    def add(self, fact_table_name, question_id, explanation_column, new_fact):
         fact_table_path = TABLES_DIRECTORY + "/" + fact_table_name + '.tsv'
         new_fact_id = str(uuid.uuid4())
 
         self.__add_new_fact(fact_table_path, new_fact, new_fact_id)
-        self.__add_fact_to_explanation(question_id, new_fact_id, explanation)
+        self.__add_fact_to_explanation(
+            question_id, new_fact_id, explanation_column)
 
     def update(self, edited_fact):
         fact_id = edited_fact['[SKIP] UID']
@@ -60,19 +61,22 @@ class Fact:
         updated_fact_table.to_csv(fact_table_path, sep='\t', index=False)
 
     # Add the id of the new fact to question's explanation list
-    def __add_fact_to_explanation(self, question_id, new_fact_id, explanation):
+    def __add_fact_to_explanation(self,
+                                  question_id,
+                                  new_fact_id,
+                                  explanation_column):
         questions = pd.read_csv(QUESTION_FILE_PATH, sep='\t')
 
         question_row = (questions[questions['QuestionID'] == question_id])
-        if type(question_row[explanation].values[0]) == str:
-            existing_explanation = question_row[explanation].values[0]
+        if type(question_row[explanation_column].values[0]) == str:
+            existing_explanation = question_row[explanation_column].values[0]
         else:
             existing_explanation = ''
 
         if (len(question_row.values) == 0):
             raise Exception('Question with given ID does not exist')
 
-        questions.loc[questions['QuestionID'] == question_id, explanation] = (
+        questions.loc[questions['QuestionID'] == question_id, explanation_column] = (
             existing_explanation + ' ' + new_fact_id + '|ADDED')
 
         questions.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
