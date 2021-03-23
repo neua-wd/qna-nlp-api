@@ -22,41 +22,25 @@ class Overview:
         return self.__get_overview_from_row(row)
 
     def sample(self):
-        return self.__get_overview_from_row(self.question_table.sample())
+        sample = self.question_table.sample()
+        return self.__get_overview_from_row(sample)
 
-    def remove_fact(self, question_id, explanation_column, fact_id):
-        question_row = self.question_table[self.question_table['QuestionID']
-                                           == question_id]
-        explanation_ids = question_row[explanation_column].values[0].split()
-
-        self.question_table.loc[self.question_table['QuestionID']
-                                == question_id, explanation_column] = ' '.join(
-                                    [fact for fact in explanation_ids if (
-                                     fact_id not in fact)])
-
-        self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
-
-        return self.__get_overview_from_row(
-            self.question_table[self.question_table['QuestionID']
-                                == question_id])
-
-    def update_explanation_order(self,
-                                 question_id,
-                                 explanation_column,
-                                 new_order):
-        print(new_order)
+    def update_explanation(self,
+                           question_id,
+                           explanation_column,
+                           new_facts):
         question_row = self.question_table[self.question_table['QuestionID']
                                            == question_id]
         old_explanation = question_row[explanation_column].values[0].split()
 
-        new_explanation = []
-        for fact_id in new_order:
-            new_explanation.append(
+        new_facts_with_tags = []
+        for fact_id in new_facts:
+            new_facts_with_tags.append(
                 ''.join(
                     [id_with_tag for id_with_tag in old_explanation if fact_id in id_with_tag]))
 
         self.question_table.loc[self.question_table['QuestionID']
-                                == question_id, explanation_column] = ' '.join(new_explanation)
+                                == question_id, explanation_column] = ' '.join(new_facts_with_tags)
 
         self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
 
@@ -117,6 +101,7 @@ class Overview:
                     if ((column == '[SKIP] UID') | ('[SKIP]' not in column)):
                         explanation[column] = value if type(
                             value) == str else ''
+
             explanations[row['[SKIP] UID'].values[0]] = explanation
 
         return self.__get_correct_order(explanation_ids, explanations)
@@ -124,6 +109,7 @@ class Overview:
     def __get_correct_order(self, explanation_ids, explanations):
         ordered = []
         for explanation_id in explanation_ids:
-            ordered.append(explanations[explanation_id])
+            if (explanation_id in explanations):
+                ordered.append(explanations[explanation_id])
 
         return ordered

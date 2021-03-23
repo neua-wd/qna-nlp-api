@@ -16,38 +16,27 @@ class OverviewController(Resource):
                 return Overview().find(question)
             else:
                 return Overview().sample()
-
         except Exception as e:
-            print(e)
             return {'error': e.args}
 
-    # Remove a fact from an explanation
     def patch(self):
         try:
             parser = reqparse.RequestParser()
             parser.add_argument('question_id', type=str)
             parser.add_argument('explanation_column', type=str)
-            parser.add_argument('fact_id', type=str)
             # Passing a list of strings with flask_restful is a known bug
             # The issue is still open
             # A workaround is to set parameters like below
-            parser.add_argument('new_order', required=False,
-                                type=str, action='append', default=[])
+            parser.add_argument('new_facts', required=True,
+                                type=str, action='append', default=[],
+                                help='Please provide the new_facts')
 
             question_id = parser.parse_args()['question_id']
             explanation_column = parser.parse_args()['explanation_column']
-            fact_id = parser.parse_args()['fact_id']
-            new_oder = parser.parse_args()['new_order']
+            new_facts = parser.parse_args()['new_facts']
 
-            if (not (fact_id or new_oder)):
-                return {'error': 'Please provide either the new_order or the fact_id'}
-
-            if (fact_id):
-                return Overview().remove_fact(question_id, explanation_column,
-                                              fact_id)
-            else:
-                return Overview().update_explanation_order(question_id,
-                                                           explanation_column,
-                                                           new_oder)
+            return Overview().update_explanation(question_id,
+                                                 explanation_column,
+                                                 new_facts)
         except Exception as e:
             return {'error': e.args}
