@@ -43,7 +43,7 @@ class Overview:
 
         self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
 
-        return self.__get_overview_from_row(question_row)
+        return self.__get_overview_from_row(self.__get_row_by_id(question_id))
 
     def update_answer(self, question_id, new_answer):
         self.question_table.loc[self.question_table['QuestionID'] == question_id,
