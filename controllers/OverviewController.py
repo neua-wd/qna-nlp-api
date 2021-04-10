@@ -19,24 +19,40 @@ class OverviewController(Resource):
         except Exception as e:
             return {'error': e.args}
 
+    # Update the fact IDs in a question row
+    # Used for updating the ordering and for removing facts
     def patch(self):
         try:
             parser = reqparse.RequestParser()
+            parser.add_argument('update_type', type=str, required=True,
+                                help='Please provide the update type (facts or answer)')
+
             parser.add_argument('question_id', type=str)
             parser.add_argument('explanation_column', type=str)
             # Passing a list of strings with flask_restful is a known bug
             # The issue is still open
             # A workaround is to set parameters like below
-            parser.add_argument('new_facts', required=True,
-                                type=str, action='append', default=[],
-                                help='Please provide the new_facts')
+            parser.add_argument('new_facts', type=str,
+                                action='append', default=[])
 
-            question_id = parser.parse_args()['question_id']
-            explanation_column = parser.parse_args()['explanation_column']
-            new_facts = parser.parse_args()['new_facts']
+            parser.add_argument('new_answer', type=str)
 
-            return Overview().update_explanation(question_id,
-                                                 explanation_column,
-                                                 new_facts)
+            if (parser.parse_args()['update_type'] == 'facts'):
+                return self.__updated_explanation(parser)
+            elif (parser.parse_args()['update_type'] == 'answer'):
+                return self.__updated_answer(parser)
+            else:
+                return {'error': 'update_type can only be "facts" or "answers"'}, 422
         except Exception as e:
+            print(e)
             return {'error': e.args}
+
+    def __updated_explanation(self, parser):
+        return Overview().update_explanation(parser.parse_args()['question_id'],
+                                             parser.parse_args()[
+            'explanation_column'],
+            parser.parse_args()['new_facts'])
+
+    def __updated_answer(self, parser):
+        return Overview().update_answer(parser.parse_args()['question_id'],
+                                        parser.parse_args()['new_answer'])

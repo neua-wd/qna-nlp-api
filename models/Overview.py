@@ -29,8 +29,7 @@ class Overview:
                            question_id,
                            explanation_column,
                            new_facts):
-        question_row = self.question_table[self.question_table['QuestionID']
-                                           == question_id]
+        question_row = self.__get_row_by_id(question_id)
         old_explanation = question_row[explanation_column].values[0].split()
 
         new_facts_with_tags = []
@@ -44,9 +43,19 @@ class Overview:
 
         self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
 
-        return self.__get_overview_from_row(
-            self.question_table[self.question_table['QuestionID']
-                                == question_id])
+        return self.__get_overview_from_row(question_row)
+
+    def update_answer(self, question_id, new_answer):
+        self.question_table.loc[self.question_table['QuestionID'] == question_id,
+                                'AnswerKey'] = new_answer
+
+        self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
+
+        return self.__get_overview_from_row(self.__get_row_by_id(question_id))
+
+    def __get_row_by_id(self, question_id):
+        return self.question_table[self.question_table['QuestionID']
+                                   == question_id]
 
     def __get_overview_from_row(self, row):
         if (len(row['question'].values) == 0):
