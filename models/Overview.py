@@ -29,8 +29,7 @@ class Overview:
                            question_id,
                            explanation_column,
                            new_facts):
-        question_row = self.question_table[self.question_table['QuestionID']
-                                           == question_id]
+        question_row = self.__get_row_by_id(question_id)
         old_explanation = question_row[explanation_column].values[0].split()
 
         new_facts_with_tags = []
@@ -39,33 +38,48 @@ class Overview:
                 ''.join(
                     [id_with_tag for id_with_tag in old_explanation if fact_id in id_with_tag]))
 
-        self.question_table.loc[self.question_table['QuestionID']
-                                == question_id, explanation_column] = ' '.join(new_facts_with_tags)
+        question_row[explanation_column] = ' '.join(new_facts_with_tags)
 
-        self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
+        self.__save_row_to_table(question_row, question_id)
 
-        return self.__get_overview_from_row(
-            self.question_table[self.question_table['QuestionID']
-                                == question_id])
+        return self.__get_overview_from_row(question_row)
+
+    def update_answer(self, question_id, new_answer):
+        row = self.__get_row_by_id(question_id)
+        row['AnswerKey'] = new_answer
+
+        correct_explanation = 'correct' + new_answer
+        row['explanation'] = row[correct_explanation]
+
+        self.__save_row_to_table(row, question_id)
+
+        return self.__get_overview_from_row(row)
+
+    def __get_row_by_id(self, question_id):
+        return self.question_table[self.question_table['QuestionID']
+                                   == question_id]
 
     def __get_overview_from_row(self, row):
         if (len(row['question'].values) == 0):
             raise Exception('Question does not exist')
 
         question_elements = re.split(' \(', row['question'].values[0])
+        answer = row['AnswerKey'].values[0]
 
-        return {
+        overview = {
             'question_id': row['QuestionID'].values[0],
             'question': question_elements[0],
             'choices': self.__get_choices(question_elements),
-            'answer': row['AnswerKey'].values[0],
-            'explanation': self.__get_explanation(row['explanation'].values[0]),
-            'explanationA': self.__get_explanation(row['explanationA'].values[0]),
-            'explanationB': self.__get_explanation(row['explanationB'].values[0]),
-            'explanationC': self.__get_explanation(row['explanationC'].values[0]),
-            'explanationD': self.__get_explanation(row['explanationD'].values[0]),
-            'explanationE': self.__get_explanation(row['explanationE'].values[0]),
+            'answer': answer,
+            'explanation': self.__get_explanation(row['explanation'].values[0])
         }
+
+        for choice in ['A', 'B', 'C', 'D', 'E']:
+            if (answer != choice):
+                key = 'incorrect' + choice
+                overview[key] = self.__get_explanation(row[key].values[0])
+
+        return overview
 
     def __get_choices(self, question_elements):
         choices = {}
@@ -113,3 +127,8 @@ class Overview:
                 ordered.append(explanations[explanation_id])
 
         return ordered
+
+    def __save_row_to_table(self, row, question_id):
+        self.question_table.loc[self.question_table['QuestionID']
+                                == question_id] = row
+        self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
