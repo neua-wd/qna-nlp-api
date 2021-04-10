@@ -53,19 +53,22 @@ class Overview:
             raise Exception('Question does not exist')
 
         question_elements = re.split(' \(', row['question'].values[0])
+        answer = row['AnswerKey'].values[0]
 
-        return {
+        overview = {
             'question_id': row['QuestionID'].values[0],
             'question': question_elements[0],
             'choices': self.__get_choices(question_elements),
-            'answer': row['AnswerKey'].values[0],
-            'explanation': self.__get_explanation(row['explanation'].values[0]),
-            'explanationA': self.__get_explanation(row['explanationA'].values[0]),
-            'explanationB': self.__get_explanation(row['explanationB'].values[0]),
-            'explanationC': self.__get_explanation(row['explanationC'].values[0]),
-            'explanationD': self.__get_explanation(row['explanationD'].values[0]),
-            'explanationE': self.__get_explanation(row['explanationE'].values[0]),
+            'answer': answer,
+            'explanation': self.__get_explanation(row['explanation'].values[0])
         }
+
+        for choice in ['A', 'B', 'C', 'D', 'E']:
+            if (answer != choice):
+                key = 'incorrect' + choice
+                overview[key] = self.__get_explanation(row[key].values[0])
+
+        return overview
 
     def __get_choices(self, question_elements):
         choices = {}
