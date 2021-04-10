@@ -38,20 +38,22 @@ class Overview:
                 ''.join(
                     [id_with_tag for id_with_tag in old_explanation if fact_id in id_with_tag]))
 
-        self.question_table.loc[self.question_table['QuestionID']
-                                == question_id, explanation_column] = ' '.join(new_facts_with_tags)
+        question_row[explanation_column] = ' '.join(new_facts_with_tags)
 
-        self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
+        self.__save_row_to_table(question_row, question_id)
 
-        return self.__get_overview_from_row(self.__get_row_by_id(question_id))
+        return self.__get_overview_from_row(question_row)
 
     def update_answer(self, question_id, new_answer):
-        self.question_table.loc[self.question_table['QuestionID'] == question_id,
-                                'AnswerKey'] = new_answer
+        row = self.__get_row_by_id(question_id)
+        row['AnswerKey'] = new_answer
 
-        self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
+        correct_explanation = 'correct' + new_answer
+        row['explanation'] = row[correct_explanation]
 
-        return self.__get_overview_from_row(self.__get_row_by_id(question_id))
+        self.__save_row_to_table(row, question_id)
+
+        return self.__get_overview_from_row(row)
 
     def __get_row_by_id(self, question_id):
         return self.question_table[self.question_table['QuestionID']
@@ -125,3 +127,8 @@ class Overview:
                 ordered.append(explanations[explanation_id])
 
         return ordered
+
+    def __save_row_to_table(self, row, question_id):
+        self.question_table.loc[self.question_table['QuestionID']
+                                == question_id] = row
+        self.question_table.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
