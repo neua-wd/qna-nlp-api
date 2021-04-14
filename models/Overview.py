@@ -4,6 +4,8 @@ import glob
 
 from constants import QUESTION_FILE_PATH, TABLES_DIRECTORY
 
+from models.Fact import Fact
+
 
 class Overview:
     def __init__(self):
@@ -94,39 +96,11 @@ class Overview:
             return []
 
         explanation_ids = []
-        explanation_rows = []
-        explanations = {}
 
         for fact_id in ids_with_tags.split():
             explanation_ids.append(fact_id.split('|')[0])
 
-        for path in glob.glob(TABLES_DIRECTORY + '/*.tsv'):
-            table = pd.read_csv(path, sep='\t')
-            for explanation_id in explanation_ids:
-                row = table.loc[table['[SKIP] UID'] == explanation_id]
-                if (row.size > 0):
-                    explanation_rows.append(row)
-
-        for row in explanation_rows:
-            explanation = {}
-            for column in row.columns:
-                for i in range(row[column].size):
-                    value = row[column].values[i]
-                    if ((column == '[SKIP] UID') | ('[SKIP]' not in column)):
-                        explanation[column] = value if type(
-                            value) == str else ''
-
-            explanations[row['[SKIP] UID'].values[0]] = explanation
-
-        return self.__get_correct_order(explanation_ids, explanations)
-
-    def __get_correct_order(self, explanation_ids, explanations):
-        ordered = []
-        for explanation_id in explanation_ids:
-            if (explanation_id in explanations):
-                ordered.append(explanations[explanation_id])
-
-        return ordered
+        return Fact().get_facts_by_ids(explanation_ids)
 
     def __save_row_to_table(self, row, question_id):
         self.question_table.loc[self.question_table['QuestionID']

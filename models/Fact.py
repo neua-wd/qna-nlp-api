@@ -1,13 +1,42 @@
+from constants import TABLES_DIRECTORY, QUESTION_FILE_PATH
 import glob
 import pandas as pd
 import uuid
-
-from constants import TABLES_DIRECTORY, QUESTION_FILE_PATH
+from nltk import PorterStemmer, WordNetLemmatizer, word_tokenize
+from nltk.corpus import stopwords
 
 
 class Fact:
-    # Add new fact to the corresponsing fact table
-    # and add the id to the question's explanation list
+    def __init__(self, model=None, fact_ids=None):
+        self.model = model
+        self.fact_ids = fact_ids
+
+    def get_facts_by_ids(self, ids):
+        explanation_rows = []
+        facts = {}
+
+        for path in glob.glob(TABLES_DIRECTORY + '/*.tsv'):
+            table = pd.read_csv(path, sep='\t')
+            for explanation_id in ids:
+                row = table.loc[table['[SKIP] UID'] == explanation_id]
+                if (row.size > 0):
+                    explanation_rows.append(row)
+
+        for row in explanation_rows:
+            explanation = {}
+            for column in row.columns:
+                for i in range(row[column].size):
+                    value = row[column].values[i]
+                    if ((column == '[SKIP] UID') | ('[SKIP]' not in column)):
+                        explanation[column] = value if type(
+                            value) == str else ''
+
+            facts[row['[SKIP] UID'].values[0]] = explanation
+
+        return self.__get_correct_order(ids, facts)
+
+        # Add new fact to the corresponsing fact table
+        # and add the id to the question's explanation list
     def add(self, fact_table_name, question_id, explanation_column, new_fact):
         fact_table_path = TABLES_DIRECTORY + "/" + fact_table_name + '.tsv'
         new_fact_id = str(uuid.uuid4())
@@ -29,21 +58,32 @@ class Fact:
 
                 table.to_csv(path, sep='\t', index=False)
 
-    # return some random facts (mock data) for now
-    def get_similar(self):
-        table_name = 'ACTION'
-        fact_table_path = TABLES_DIRECTORY + "/" + table_name + '.tsv'
-        fact_table = pd.read_csv(fact_table_path, sep='\t')
+    def get_similar(self, sentence):
+        tokens = word_tokenize(sentence.lower())
 
-        similar = []
-        for row in fact_table.head(10).to_dict(orient='rows'):
-            fact = {}
-            for (key, value) in row.items():
-                if type(value) == str:
-                    fact[key] = value
-            similar.append({table_name: fact})
+        normalized_tokens = []
+        for word in tokens:
+            if word not in stopwords.words('english'):
+                word = WordNetLemmatizer().lemmatize(word)
+                word = PorterStemmer().stem(word)
+                normalized_tokens.append(word)
 
-        return similar
+        vector = self.model.infer_vector(normalized_tokens)
+        most_similar = self.model.docvecs.most_similar(positive=[vector])
+
+        ids = []
+        for sentence in most_similar:
+            ids.append(self.fact_ids['Fact ID'][sentence[0]])
+
+        return self.get_facts_by_ids(ids)
+
+    def __get_correct_order(self, ids, facts):
+        ordered = []
+        for fact_id in ids:
+            if (fact_id in facts):
+                ordered.append(facts[fact_id])
+
+        return ordered
 
     # Add the new fact to the corresponding fact table
     def __add_new_fact(self, fact_table_path, new_fact, new_fact_id):
