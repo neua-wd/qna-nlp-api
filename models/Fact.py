@@ -5,6 +5,8 @@ import uuid
 from nltk import PorterStemmer, WordNetLemmatizer, word_tokenize
 from nltk.corpus import stopwords
 
+from models.Question import Question
+
 
 class Fact:
     def __init__(self, model=None, fact_ids=None):
@@ -42,8 +44,9 @@ class Fact:
         new_fact_id = str(uuid.uuid4())
 
         self.__add_new_fact(fact_table_path, new_fact, new_fact_id)
-        self.__add_fact_to_explanation(
-            question_id, new_fact_id, explanation_column)
+        Question().add_fact_to_explanation(question_id,
+                                           explanation_column,
+                                           new_fact_id)
 
     def update(self, edited_fact):
         fact_id = edited_fact['[SKIP] UID']
