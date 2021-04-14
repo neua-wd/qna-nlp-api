@@ -25,7 +25,7 @@ class OverviewController(Resource):
         try:
             parser = reqparse.RequestParser()
             parser.add_argument('update_type', type=str, required=True,
-                                help='Please provide the update type (facts or answer)')
+                                help='Please provide the update type')
 
             parser.add_argument('question_id', type=str)
             parser.add_argument('explanation_column', type=str)
@@ -37,14 +37,19 @@ class OverviewController(Resource):
 
             parser.add_argument('new_answer', type=str)
 
-            if (parser.parse_args()['update_type'] == 'facts'):
+            parser.add_argument('new_fact', type=str)
+
+            update_type = parser.parse_args()['update_type']
+
+            if (update_type == 'facts'):
                 return self.__updated_explanation(parser)
-            elif (parser.parse_args()['update_type'] == 'answer'):
+            elif (update_type == 'answer'):
                 return self.__updated_answer(parser)
+            elif (update_type == 'add fact'):
+                return self.__add_fact(parser)
             else:
-                return {'error': 'update_type can only be "facts" or "answers"'}, 422
+                return {'error': 'update_type can only be "facts", "answers" or "add fact'}, 422
         except Exception as e:
-            print(e)
             return {'error': e.args}
 
     def __updated_explanation(self, parser):
@@ -56,3 +61,8 @@ class OverviewController(Resource):
     def __updated_answer(self, parser):
         return Overview().update_answer(parser.parse_args()['question_id'],
                                         parser.parse_args()['new_answer'])
+
+    def __add_fact(self, parser):
+        return Overview().add_fact(parser.parse_args()['question_id'],
+                                   parser.parse_args()['explanation_column'],
+                                   parser.parse_args()['new_fact'])

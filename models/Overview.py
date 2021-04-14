@@ -47,15 +47,26 @@ class Overview:
         return self.__get_overview_from_row(question_row)
 
     def update_answer(self, question_id, new_answer):
-        row = self.__get_row_by_id(question_id)
-        row['AnswerKey'] = new_answer
+        question_row = self.__get_row_by_id(question_id)
+        question_row['AnswerKey'] = new_answer
 
         correct_explanation = 'correct' + new_answer
-        row['explanation'] = row[correct_explanation]
+        question_row['explanation'] = question_row[correct_explanation]
 
-        self.__save_row_to_table(row, question_id)
+        self.__save_row_to_table(question_row, question_id)
 
-        return self.__get_overview_from_row(row)
+        return self.__get_overview_from_row(question_row)
+
+    def add_fact(self, question_id, explanation_column, new_fact):
+        question_row = self.__get_row_by_id(question_id)
+
+        updated = question_row[explanation_column].values[0] + \
+            ' ' + new_fact + '|ADDED'
+        question_row[explanation_column] = updated
+
+        self.__save_row_to_table(question_row, question_id)
+
+        return self.__get_overview_from_row(question_row)
 
     def __get_row_by_id(self, question_id):
         return self.question_table[self.question_table['QuestionID']
