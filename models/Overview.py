@@ -57,11 +57,15 @@ class Overview:
 
         return self.__get_overview_from_row(question_row)
 
-    def add_fact(self, question_id, explanation_column, new_fact):
+    def add_fact(self, question_id, explanation_column, new_fact_id):
         question_row = self.__get_row_by_id(question_id)
 
-        updated = question_row[explanation_column].values[0] + \
-            ' ' + new_fact + '|ADDED'
+        current_ids = question_row[explanation_column].values[0]
+        if (type(current_ids) == str):
+            updated = current_ids + ' ' + new_fact_id + '|ADDED'
+        else:
+            updated = ' ' + new_fact_id + '|ADDED'
+
         question_row[explanation_column] = updated
 
         self.__save_row_to_table(question_row, question_id)
