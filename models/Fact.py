@@ -73,7 +73,7 @@ class Fact:
 
         vector = self.model.infer_vector(normalized_tokens)
         most_similar = self.model.docvecs.most_similar(positive=[vector],
-                                                       topn=10)
+                                                       topn=12)
 
         ids = []
         for sentence in most_similar:
