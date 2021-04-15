@@ -1,4 +1,4 @@
-from constants import TABLES_DIRECTORY, QUESTION_FILE_PATH
+from constants import TABLES_DIRECTORY, QUESTION_FILE_PATH, ABSTRACTIVE_TAGS
 import glob
 import pandas as pd
 import uuid
@@ -60,6 +60,21 @@ class Fact:
                         edited_fact[column])
 
                 table.to_csv(path, sep='\t', index=False)
+
+    def categorize(self, facts):
+        abstracion = []
+        unification = {}
+
+        for fact in facts:
+            if ABSTRACTIVE_TAGS & fact.keys():
+                abstracion.append(fact)
+            elif len(unification) == 0:
+                unification = fact
+
+        return {
+            "abstraction": abstracion,
+            "unification": unification
+        }
 
     def get_similar(self, sentence):
         tokens = word_tokenize(sentence.lower())

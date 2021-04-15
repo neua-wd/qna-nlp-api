@@ -29,6 +29,9 @@ class Overview:
                 key = 'incorrect' + choice
                 overview[key] = self.__get_explanation(row[key].values[0])
 
+        overview['categorized_explanation'] = Fact(
+        ).categorize(overview['explanation'])
+
         return overview
 
     def __get_choices(self, question_elements):
