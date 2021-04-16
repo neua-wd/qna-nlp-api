@@ -29,6 +29,10 @@ class Question:
 
         question_row[explanation_column] = updated
 
+        if (explanation_column == "explanation"):
+            corresponding_column = "correct" + question_row["AnswerKey"]
+            question_row[corresponding_column] = updated
+
         self.__save_row_to_table(question_row)
 
     def update_explanation(self,
@@ -44,7 +48,13 @@ class Question:
                 ''.join(
                     [id_with_tag for id_with_tag in old_explanation if fact_id in id_with_tag]))
 
-        question_row[explanation_column] = ' '.join(new_facts_with_tags)
+        updated = ' '.join(new_facts_with_tags)
+
+        question_row[explanation_column] = updated
+
+        if (explanation_column == "explanation"):
+            corresponding_column = "correct" + question_row["AnswerKey"]
+            question_row[corresponding_column] = updated
 
         self.__save_row_to_table(question_row)
 
