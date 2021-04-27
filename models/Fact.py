@@ -14,26 +14,14 @@ class Fact:
         self.fact_ids = fact_ids
 
     def get_facts_by_ids(self, ids):
-        explanation_rows = []
         facts = {}
-
         for path in glob.glob(TABLES_DIRECTORY + '/*.tsv'):
             table = pd.read_csv(path, sep='\t')
             for explanation_id in ids:
-                row = table.loc[table['[SKIP] UID'] == explanation_id]
-                if (row.size > 0):
-                    explanation_rows.append(row)
-
-        for row in explanation_rows:
-            explanation = {}
-            for column in row.columns:
-                for i in range(row[column].size):
-                    value = row[column].values[i]
-                    if ((column == '[SKIP] UID') | ('[SKIP]' not in column)):
-                        explanation[column] = value if type(
-                            value) == str else ''
-
-            facts[row['[SKIP] UID'].values[0]] = explanation
+                fact_row = table.loc[table['[SKIP] UID'] == explanation_id]
+                if (fact_row.size > 0):
+                    facts[fact_row['[SKIP] UID'].values[0]
+                          ] = self.__get_explanation_from_fact(fact_row)
 
         return self.__get_correct_order(ids, facts)
 
@@ -139,3 +127,14 @@ class Fact:
             existing_explanation + ' ' + new_fact_id + '|ADDED')
 
         questions.to_csv(QUESTION_FILE_PATH, sep='\t', index=False)
+
+    def __get_explanation_from_fact(self, fact_row):
+        explanation = {}
+        for column in fact_row.columns:
+            for i in range(fact_row[column].size):
+                value = fact_row[column].values[i]
+                if ((column == '[SKIP] UID') | ('[SKIP]' not in column)):
+                    explanation[column] = value if type(
+                        value) == str else ''
+
+        return explanation

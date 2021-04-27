@@ -13,7 +13,7 @@ class Question:
 
     def get_row_by_question(self, question):
         return self.question_table[self.question_table['question'].str.contains(
-            question)]
+            question.lower(), case=False)]
 
     def sample(self):
         return self.question_table.sample()
@@ -40,15 +40,15 @@ class Question:
                            explanation_column,
                            new_facts):
         question_row = self.get_row_by_id(question_id)
-        old_explanation = question_row[explanation_column].values[0].split()
 
-        new_facts_with_tags = []
+        tag_map = {}
+        for id_with_tag in question_row[explanation_column].values[0].split():
+            pair = id_with_tag.split('|')
+            tag_map[pair[0]] = pair[1]
+
+        updated = ""
         for fact_id in new_facts:
-            new_facts_with_tags.append(
-                ''.join(
-                    [id_with_tag for id_with_tag in old_explanation if fact_id in id_with_tag]))
-
-        updated = ' '.join(new_facts_with_tags)
+            updated += fact_id + '|' + tag_map[fact_id] + ' '
 
         question_row[explanation_column] = updated
 
@@ -61,9 +61,7 @@ class Question:
     def change_answer(self, question_id, new_answer):
         question_row = self.get_row_by_id(question_id)
         question_row['AnswerKey'] = new_answer
-
-        correct_explanation = 'correct' + new_answer
-        question_row['explanation'] = question_row[correct_explanation]
+        question_row['explanation'] = question_row['correct' + new_answer]
 
         self.__save_row_to_table(question_row)
 
