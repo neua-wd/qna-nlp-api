@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 
 from models.Fact import Fact
+from models.Question import Question
 from models.Overview import Overview
 
 
@@ -18,11 +19,12 @@ class FactController(Resource):
                                 help='Please provide the new fact')
 
             args = parser.parse_args()
-
             Fact().add(args['table_name'], args['to_question'],
                        args['explanation_column'], args['new_fact'])
 
-            return Overview().find_by_id(args['to_question'])
+            question_row = Question().get_row_by_id(args['to_question'])
+
+            return Overview().get_overview_from_row(question_row)
         except Exception as e:
             return {'error': e.args}
 

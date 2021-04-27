@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 
 from models.Overview import Overview
+from models.Question import Question
 
 
 class OverviewController(Resource):
@@ -13,9 +14,11 @@ class OverviewController(Resource):
 
             question = parser.parse_args()['question']
             if (question):
-                return Overview().find(question)
+                row = Question().get_row_by_question(question)
             else:
-                return Overview().sample()
+                row = Question().sample()
+
+            return Overview().get_overview_from_row(row)
         except Exception as e:
             return {'error': e.args}
 
@@ -25,7 +28,7 @@ class OverviewController(Resource):
         try:
             parser = reqparse.RequestParser()
             parser.add_argument('update_type', type=str, required=True,
-                                help='Please provide the update type (facts or answer)')
+                                help='Please provide the update type')
 
             parser.add_argument('question_id', type=str)
             parser.add_argument('explanation_column', type=str)
@@ -37,22 +40,40 @@ class OverviewController(Resource):
 
             parser.add_argument('new_answer', type=str)
 
-            if (parser.parse_args()['update_type'] == 'facts'):
-                return self.__updated_explanation(parser)
-            elif (parser.parse_args()['update_type'] == 'answer'):
-                return self.__updated_answer(parser)
+            parser.add_argument('new_fact_id', type=str)
+
+            update_type = parser.parse_args()['update_type']
+
+            args = parser.parse_args()
+
+            if (update_type == 'facts'):
+                self.__update_explanation(args['question_id'],
+                                          args['explanation_column'],
+                                          args['new_facts'])
+            elif (update_type == 'answer'):
+                self.__update_answer(args['question_id'], args['new_answer'])
+            elif (update_type == 'add fact'):
+                self.__add_fact(args['question_id'],
+                                args['explanation_column'],
+                                args['new_fact_id'])
             else:
-                return {'error': 'update_type can only be "facts" or "answers"'}, 422
+                return {'error': 'update_type can only be "facts", "answers" or "add fact'}, 422
+
+            updated_row = Question().get_row_by_id(args['question_id'])
+
+            return Overview().get_overview_from_row(updated_row)
         except Exception as e:
-            print(e)
             return {'error': e.args}
 
-    def __updated_explanation(self, parser):
-        return Overview().update_explanation(parser.parse_args()['question_id'],
-                                             parser.parse_args()[
-            'explanation_column'],
-            parser.parse_args()['new_facts'])
+    def __update_explanation(self, question_id, explanation_column, new_facts):
+        Question().update_explanation(question_id,
+                                      explanation_column,
+                                      new_facts)
 
-    def __updated_answer(self, parser):
-        return Overview().update_answer(parser.parse_args()['question_id'],
-                                        parser.parse_args()['new_answer'])
+    def __update_answer(self, question_id, new_answer):
+        Question().change_answer(question_id, new_answer)
+
+    def __add_fact(self, question_id, explanation_column, new_fact_id):
+        Question().add_fact_to_explanation(question_id,
+                                           explanation_column,
+                                           new_fact_id)
